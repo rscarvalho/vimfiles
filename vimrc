@@ -1,3 +1,5 @@
+" Last editing: Thu Oct 24 10:53:22 BRST 2013
+"
 execute pathogen#infect()
 
 syntax on

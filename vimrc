@@ -21,11 +21,13 @@ set hlsearch
 set ignorecase
 set smartcase
 
-set foldenable
+set nofoldenable
 set mousehide
 set splitbelow
 set wildmenu
 set wildmode=list:longest
+
+colorscheme elflord
 
 let g:airline_theme="bubblegum"
 

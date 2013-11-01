@@ -26,6 +26,7 @@ set mousehide
 set splitbelow
 set wildmenu
 set wildmode=list:longest
+set number
 
 colorscheme elflord
 
@@ -54,24 +55,24 @@ autocmd FileType coffee setlocal shiftwidth=2 tabstop=2
 let coffee_compiler = '/usr/local/share/npm/bin/coffee'
 let g:vim_markdown_folding_disabled=1
 
-function OpenSourceTree()
+function! OpenSourceTree()
     let l:git_root=system("cd " . shellescape(expand("%:p:h")) . " && git rev-parse --show-toplevel")
     let l:git_root=strpart(l:git_root, 0, strlen(l:git_root) - 1)
     execute "silent !/usr/bin/open -a SourceTree " . shellescape(l:git_root)
 endfunction
 
-command SourceTree call OpenSourceTree()
-command -nargs=+ Heroku :!heroku <args>
+command! SourceTree call OpenSourceTree()
+command! -nargs=+ Heroku :!heroku <args>
 
-command W execute 'silent w !sudo tee % > /dev/null' | edit!
+command! W execute 'silent w !sudo tee % > /dev/null' | edit!
 
 au BufNewFile,BufRead *.jbuilder set filetype=ruby
 
 " Remove whitespaces
 command! TrimSpaces %s/\s\+$//e
-au BufWritePre * :%s/\s\+$//e
+autocmd! BufWritePre * :%s/\s\+$//e
 
-function LandSlide(nargs, ...)
+function! LandSlide(nargs, ...)
     let l:t = strftime("%m%d%H%M")
     let l:tmpdir = expand("$TMPDIR")
 
@@ -92,6 +93,36 @@ function LandSlide(nargs, ...)
     execute 'silent !/usr/bin/env landslide ' . l:cmdargs . " -d " . shellescape(l:fname) . " " . expand("%:p")
     execute 'silent !/usr/bin/env open ' . shellescape(l:fname)
 endfunction
-command LandSlide call LandSlide(0)
+command! LandSlide call LandSlide(0)
+
+
+" Netrw extension
+function! Nhere()
+    let l:path = expand("%:p:h")
+    execute 'e ' . l:path
+endfunction
+command! Nhere call Nhere()
 
 nnoremap <F8> :chdir %:p:h<CR>:echom "Current Directory: " . expand("%:p:h")<CR>
+
+
+" Splits
+" window
+nmap <leader>swl :topleft vnew<CR>
+nmap <leader>swh :botright vnew<CR>
+nmap <leader>swk :topleft new<CR>
+nmap <leader>swj :botright new<CR>
+
+" buffer
+nmap <leader>sl :leftabove vnew<CR>
+nmap <leader>sh :rightbelow vnew<CR>
+nmap <leader>sk :leftabove new<CR>
+nmap <leader>sj :rightbelow new<CR>
+
+
+" CommandT Settings
+let g:CommandTMaxHeight = 10
+let g:CommandTWildIgnore = &wildignore . ",vendor/ruby/**"
+let g:CommandTMatchWindowAtTop = 0
+
+nnoremap <C-p> :CommandT<CR>

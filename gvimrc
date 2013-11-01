@@ -8,8 +8,8 @@ colorscheme codeschool
 " 	set transp=8
 " endif
 
-if has("gui_mac")
-    set guifont=Source\ Code\ Pro\ Light:h13
+if has("gui_mac") || has("gui_macvim")
+    set guifont=Source\ Code\ Pro\ Medium:h13
 else
     set guifont=Source\ Code\ Pro\ Medium\ 13
 endif
@@ -21,14 +21,6 @@ endif
 
 set columns=160
 set lines=60
-set number
-
-" map <C-n> :NERDTreeToggle<CR>
-nnoremap <C-f> :CommandT<CR>
-" map <F5> <ESC>:NERDTreeFind<CR>
-
-" move cursor to editor window when clicking on NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " set guioptions-=r " Removes right hand scroll bar
 set go-=L " Removes left hand scroll bar

@@ -1,7 +1,7 @@
 set go-=T
 set bg=dark
 
-colorscheme codeschool
+colorscheme mayansmoke
 
 " if &background == "dark"
 " 	hi normal guibg=black

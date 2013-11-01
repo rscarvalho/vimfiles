@@ -30,7 +30,7 @@ set number
 
 colorscheme elflord
 
-let g:airline_theme="bubblegum"
+let g:airline_theme="solarized"
 
 set completeopt=longest,menuone
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -126,3 +126,4 @@ let g:CommandTWildIgnore = &wildignore . ",vendor/ruby/**"
 let g:CommandTMatchWindowAtTop = 0
 
 nnoremap <C-p> :CommandT<CR>
+

@@ -28,9 +28,13 @@ set wildmenu
 set wildmode=list:longest
 set number
 
-colorscheme elflord
+colorscheme mustang
 
-let g:airline_theme="solarized"
+if has("gui")
+    let g:airline_theme="solarized"
+else
+    let g:ariline_theme="bubblegum"
+endif
 
 set completeopt=longest,menuone
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -127,3 +131,4 @@ let g:CommandTMatchWindowAtTop = 0
 
 nnoremap <C-p> :CommandT<CR>
 
+nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>

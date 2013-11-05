@@ -9,7 +9,7 @@ colorscheme mayansmoke
 " endif
 
 if has("gui_mac") || has("gui_macvim")
-    set guifont=Source\ Code\ Pro\ Medium:h13
+    set guifont=Source\ Code\ Pro\ Medium:h16
 else
     set guifont=Source\ Code\ Pro\ Medium\ 13
 endif

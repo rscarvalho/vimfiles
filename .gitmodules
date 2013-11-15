@@ -61,3 +61,12 @@
 [submodule "bundle/vim-bundler"]
 	path = bundle/vim-bundler
 	url = git@github.com:tpope/vim-bundler.git
+[submodule "bundle/vim-handlebars"]
+	path = bundle/vim-handlebars
+	url = https://github.com/nono/vim-handlebars.git
+[submodule "bundle/vim-misc"]
+	path = bundle/vim-misc
+	url = https://github.com/xolox/vim-misc.git
+[submodule "bundle/vim-session"]
+	path = bundle/vim-session
+	url = https://github.com/xolox/vim-session.git

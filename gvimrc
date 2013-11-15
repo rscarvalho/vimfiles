@@ -1,15 +1,18 @@
 set go-=T
 set bg=dark
 
-colorscheme mayansmoke
+" colorscheme mayansmoke
+colorscheme mustang
 
 " if &background == "dark"
 " 	hi normal guibg=black
 " 	set transp=8
 " endif
 
+set transparency=2
+
 if has("gui_mac") || has("gui_macvim")
-    set guifont=Source\ Code\ Pro\ Medium:h16
+    set guifont=Source\ Code\ Pro\ ExtraLight:h16
 else
     set guifont=Source\ Code\ Pro\ Medium\ 13
 endif

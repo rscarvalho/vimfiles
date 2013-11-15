@@ -28,6 +28,8 @@ set wildmenu
 set wildmode=list:longest
 set number
 
+let g:netrw_liststyle=3
+
 colorscheme mustang
 
 if has("gui")
@@ -100,13 +102,6 @@ endfunction
 command! LandSlide call LandSlide(0)
 
 
-" Netrw extension
-function! Nhere()
-    let l:path = expand("%:p:h")
-    execute 'e ' . l:path
-endfunction
-command! Nhere call Nhere()
-
 nnoremap <F8> :chdir %:p:h<CR>:echom "Current Directory: " . expand("%:p:h")<CR>
 
 
@@ -126,9 +121,17 @@ nmap <leader>sj :rightbelow new<CR>
 
 " CommandT Settings
 let g:CommandTMaxHeight = 10
-let g:CommandTWildIgnore = &wildignore . ",vendor/ruby/**"
+let g:CommandTWildIgnore = &wildignore . ",vendor/ruby/**,vendor/jruby/**"
 let g:CommandTMatchWindowAtTop = 0
 
 nnoremap <C-p> :CommandT<CR>
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>
+
+" Syntastic options
+let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " trimming empty <"]
+
+" vim-session variables
+let g:session_autosave = 'yes'
+let g:session_autoload = 1
+let g:session_autosave_periodic = 5 "minutes

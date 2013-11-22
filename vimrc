@@ -127,6 +127,7 @@ let g:CommandTMatchWindowAtTop = 0
 nnoremap <C-p> :CommandT<CR>
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>
+inoremap JJ <CR><ESC>O
 
 " Syntastic options
 let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " trimming empty <"]
@@ -135,3 +136,13 @@ let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " 
 let g:session_autosave = 'yes'
 let g:session_autoload = 1
 let g:session_autosave_periodic = 5 "minutes
+
+function! MoveTo(newname)
+    let a:oldname = expand("%:p")
+    exec "saveas " . a:newname
+    call delete(a:oldname)
+    exec "bdelete " . a:oldname
+endfunction
+
+command! -nargs=1 MoveTo call MoveTo(<f-args>)
+

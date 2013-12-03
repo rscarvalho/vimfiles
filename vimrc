@@ -119,12 +119,16 @@ nmap <leader>sk :leftabove new<CR>
 nmap <leader>sj :rightbelow new<CR>
 
 
-" CommandT Settings
-let g:CommandTMaxHeight = 10
-let g:CommandTWildIgnore = &wildignore . ",vendor/ruby/**,vendor/jruby/**"
-let g:CommandTMatchWindowAtTop = 0
+"" CommandT Settings
+" let g:CommandTMaxHeight = 10
+" let g:CommandTWildIgnore = &wildignore .
+" let g:CommandTMatchWindowAtTop = 0
 
-nnoremap <C-p> :CommandT<CR>
+set wildignore+="*/vendor/ruby/*,*/vendor/jruby/*"
+
+" nnoremap <C-p> :CommandT<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
+
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>
 inoremap JJ <CR><ESC>O
@@ -144,5 +148,6 @@ function! MoveTo(newname)
     exec "bdelete " . a:oldname
 endfunction
 
-command! -nargs=1 MoveTo call MoveTo(<f-args>)
+command! -nargs=1 -complete=file MoveTo call MoveTo(<f-args>)
 
+nnoremap <leader>x :chdir ~/code/

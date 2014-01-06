@@ -4,22 +4,22 @@ set bg=dark
 " colorscheme mayansmoke
 colorscheme mustang
 
-" if &background == "dark"
-" 	hi normal guibg=black
-" 	set transp=8
-" endif
-
-set transparency=2
+if &background == "dark"
+  hi normal guibg=black
+  set transp=8
+else
+  set transparency=2
+endif
 
 if has("gui_mac") || has("gui_macvim")
-    set guifont=Source\ Code\ Pro\ ExtraLight:h16
+  set guifont=Source\ Code\ Pro\ Light:h16
 else
-    set guifont=Source\ Code\ Pro\ Medium\ 13
+  set guifont=Source\ Code\ Pro\ Medium\ 13
 endif
 
 
 if has("gui_gtk") || has("gui_gtk2")
-    map <C-S-t> <ESC>:tabnew<CR>
+  map <C-S-t> <ESC>:tabnew<CR>
 endif
 
 set columns=160

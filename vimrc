@@ -124,7 +124,8 @@ nmap <leader>sj :rightbelow new<CR>
 " let g:CommandTWildIgnore = &wildignore .
 " let g:CommandTMatchWindowAtTop = 0
 
-set wildignore+="*/vendor/ruby/*,*/vendor/jruby/*"
+set wildignore+=*/vendor/ruby/*,*/vendor/jruby/*
+set wildignore+=vendor/ruby/*,vendor/jruby/*
 
 " nnoremap <C-p> :CommandT<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>

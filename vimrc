@@ -27,6 +27,7 @@ set splitbelow
 set wildmenu
 set wildmode=list:longest
 set number
+set synmaxcol=90
 
 let g:netrw_liststyle=3
 
@@ -38,7 +39,10 @@ else
     let g:ariline_theme="bubblegum"
 endif
 
+" let g:airline#extensions#tabline#enabled = 1
+
 set completeopt=longest,menuone
+
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
   \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
@@ -103,6 +107,8 @@ command! LandSlide call LandSlide(0)
 
 
 nnoremap <F8> :chdir %:p:h<CR>:echom "Current Directory: " . expand("%:p:h")<CR>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 
 
 " Splits
@@ -152,3 +158,4 @@ endfunction
 command! -nargs=1 -complete=file MoveTo call MoveTo(<f-args>)
 
 nnoremap <leader>x :chdir ~/code/
+

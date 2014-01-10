@@ -1,4 +1,4 @@
 .netrwhist
-bundle/vim-multiple-cursors/doc/tags
 *.swp
 sessions/
+bundle/

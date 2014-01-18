@@ -15,25 +15,26 @@ set hlsearch
 set ignorecase
 set smartcase
 
-set nofoldenable
+set foldenable
 set mousehide
 set splitbelow
 set wildmenu
 set wildmode=list:longest
 set number
-set synmaxcol=90
+set synmaxcol=150
+set foldmethod=marker
+set foldmarker={{{,}}}
 
 let g:netrw_liststyle=3
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
 colorscheme mustang
 
 if has("gui")
-    let g:airline_theme="solarized"
+    let g:airline_theme="luna"
 else
     let g:ariline_theme="bubblegum"
 endif
-
-" let g:airline#extensions#tabline#enabled = 1
 
 set completeopt=longest,menuone
 
@@ -51,6 +52,7 @@ inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Es
             \ '<C-x><C-u><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
 
 inoremap jj <ESC>
+nnoremap <Space> za
 
 autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 autocmd FileType css setlocal shiftwidth=2 tabstop=2

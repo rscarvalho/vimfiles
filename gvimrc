@@ -6,13 +6,21 @@ colorscheme mustang
 
 if &background == "dark"
   hi normal guibg=black
-  set transp=8
+  set transp=4
 else
   set transparency=2
 endif
 
 if has("gui_mac") || has("gui_macvim")
-  set guifont=Source\ Code\ Pro\ Light:h16
+  " set guifont=Source\ Code\ Pro\ Light:h16
+  set guifont=Sauce\ Code\ Powerline\ Light:h14
+  let g:airline_powerline_fonts = 1
+  if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+  endif
+  let g:airline_symbols.branch = "\ue0a0"
+  let g:airline_left_sep = "\ue0b0"
+  let g:airline_right_sep = "\ue0b2"
 else
   set guifont=Source\ Code\ Pro\ Medium\ 13
 endif

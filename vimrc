@@ -31,6 +31,7 @@ Bundle "mattn/gist-vim"
 Bundle "terryma/vim-multiple-cursors"
 Bundle "scrooloose/syntastic"
 Bundle "mileszs/ack.vim"
+Bundle "airblade/vim-gitgutter"
 
 " Language support
 Bundle "dart-lang/dart-vim-plugin"

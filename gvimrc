@@ -5,7 +5,7 @@ set bg=dark
 colorscheme mustang
 
 if &background == "dark"
-  hi normal guibg=black
+  "  hi normal guibg=black
   set transp=4
 else
   set transparency=2

@@ -25,10 +25,12 @@ set synmaxcol=150
 set foldmethod=marker
 set foldmarker={{{,}}}
 
+set mouse=a
+
 let g:netrw_liststyle=3
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
-colorscheme mustang
+colorscheme solarized
 
 if has("gui")
     let g:airline_theme="luna"
@@ -57,6 +59,8 @@ nnoremap <Space> za
 autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 autocmd FileType css setlocal shiftwidth=2 tabstop=2
 autocmd FileType coffee setlocal shiftwidth=2 tabstop=2
+autocmd FileType yaml setlocal shiftwidth=2 tabstop=2
+autocmd FileType vim setlocal shiftwidth=2 tabstop=2
 
 let coffee_compiler = '/usr/local/share/npm/bin/coffee'
 let g:vim_markdown_folding_disabled=1
@@ -102,10 +106,21 @@ endfunction
 command! LandSlide call LandSlide(0)
 
 
-nnoremap <F8> :chdir %:p:h<CR>:echom "Current Directory: " . expand("%:p:h")<CR>
+" nnoremap <F8> :chdir %:p:h<CR>:echom "Current Directory: " . expand("%:p:h")<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+nnoremap <F8> :TagbarToggle<CR>
 
+let g:tagbar_type_css = {
+            \        'ctagstype' : 'Css',
+            \        'kinds'     : [
+            \        'c:classes',
+            \        's:selectors',
+            \        'i:identities'
+            \       ]
+            \ }
+let g:tagbar_type_sass = g:tagbar_type_css
+let g:tagbar_type_scss = g:tagbar_type_css
 
 " Splits
 " window
@@ -131,6 +146,7 @@ set wildignore+=vendor/ruby/*,vendor/jruby/*
 
 " nnoremap <C-p> :CommandT<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
+let g:ctrlp_follow_symlinks=1
 
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>
@@ -154,3 +170,13 @@ endfunction
 command! -nargs=1 -complete=file MoveTo call MoveTo(<f-args>)
 
 nnoremap <leader>x :chdir ~/code/
+
+iabbr {{now}} <C-r>=system("date")<CR>
+nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <Leader>sv :source $MYVIMRC<CR>
+
+" gitgutter config
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
+" command! StripBlankLines exec ':%s/\(\s*\n\s*\)\{2,}/\r\r'|:noh

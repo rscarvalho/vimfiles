@@ -1,4 +1,4 @@
-" Last editing: Fri Jan 10 11:13:29 BRST 2014
+" Last editing: Wed Jan 29 10:53:03 BRST 2014
 "
 
 filetype off
@@ -7,6 +7,7 @@ set rtp+=~/.vim/bundle/vundle/
 
 call vundle#rc()
 
+" Vundle setup {{{
 Bundle "gmarik/vundle"
 
 " Libraries
@@ -27,14 +28,14 @@ Bundle "tpope/vim-fugitive"
 Bundle "bling/vim-airline"
 Bundle "garbas/vim-snipmate"
 Bundle "honza/vim-snippets"
-Bundle "mattn/gist-vim"
+" Bundle \"mattn/gist-vim\"
 Bundle "terryma/vim-multiple-cursors"
 Bundle "scrooloose/syntastic"
 Bundle "mileszs/ack.vim"
-Bundle "airblade/vim-gitgutter"
+Bundle "majutsushi/tagbar"
 
 " Language support
-Bundle "dart-lang/dart-vim-plugin"
+" Bundle "dart-lang/dart-vim-plugin"
 Bundle "pangloss/vim-javascript"
 Bundle "vim-ruby/vim-ruby"
 Bundle "nono/vim-handlebars"
@@ -42,10 +43,13 @@ Bundle "evanmiller/nginx-vim-syntax"
 Bundle "kchmck/vim-coffee-script"
 Bundle "tpope/vim-cucumber"
 Bundle "plasticboy/vim-markdown"
-Bundle "ap/vim-css-color"
+" Messing up with colors on other windows
+" Bundle \"ap/vim-css-color\"
+Bundle "vim-scripts/Vim-R-plugin"
 
 " Color schemes
 Bundle "croaker/mustang-vim"
+Bundle "altercation/vim-colors-solarized"
 
 " Ruby on Rails support
 Bundle "tpope/vim-rails"
@@ -53,6 +57,6 @@ Bundle "tpope/vim-bundler"
 
 " Miscelaneous
 Bundle "ivalkeen/vim-simpledb"
+" }}}
 
 filetype plugin indent on
-

@@ -33,6 +33,8 @@ Bundle "terryma/vim-multiple-cursors"
 Bundle "scrooloose/syntastic"
 Bundle "mileszs/ack.vim"
 Bundle "majutsushi/tagbar"
+Bundle "benmills/vimux"
+Bundle "jgdavey/vim-turbux"
 
 " Language support
 " Bundle "dart-lang/dart-vim-plugin"
@@ -46,6 +48,7 @@ Bundle "plasticboy/vim-markdown"
 " Messing up with colors on other windows
 " Bundle \"ap/vim-css-color\"
 Bundle "vim-scripts/Vim-R-plugin"
+Bundle "vim-scripts/po.vim--Jelenak"
 
 " Color schemes
 Bundle "croaker/mustang-vim"
@@ -53,7 +56,7 @@ Bundle "altercation/vim-colors-solarized"
 
 " Ruby on Rails support
 Bundle "tpope/vim-rails"
-Bundle "tpope/vim-bundler"
+" Bundle \"tpope/vim-bundler\"
 
 " Miscelaneous
 Bundle "ivalkeen/vim-simpledb"
@@ -85,11 +88,13 @@ set foldmethod=marker
 set foldmarker={{{,}}}
 
 set mousehide
+set mouse=a
+
 set splitbelow
+set splitright
 
 set wildmenu wildmode=list:longest
 set number
-set mouse=a
 set formatoptions=qrn1
 
 set synmaxcol=150
@@ -99,16 +104,40 @@ set completeopt=longest,menuone
 
 set wildignore+=*/vendor/ruby/*,*/vendor/jruby/*
 set wildignore+=vendor/ruby/*,vendor/jruby/*
+
+set title
+set history=1000
+set undolevels=1000
+
+set nobackup
+set noswapfile
+set hidden
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+set t_Co=256
+set nrformats=
+
+set spelllang=en_us
+set grepprg=ack
+set cursorline
+set scrolloff=9999 " set cursor in middle of the screen when searching
+
+set clipboard=unnamed
 " }}}
+
+filetype plugin indent on
 
 " Filetype-specific settings {{{
 autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2
+autocmd! FileType eruby setlocal shiftwidth=2 tabstop=2
 autocmd! FileType css setlocal shiftwidth=2 tabstop=2
 autocmd! FileType coffee setlocal shiftwidth=2 tabstop=2
 autocmd! FileType yaml setlocal shiftwidth=2 tabstop=2
 autocmd! FileType vim setlocal shiftwidth=2 tabstop=2
 autocmd! BufNewFile,BufRead *.jbuilder set filetype=ruby
 autocmd! BufWritePre * :%s/\s\+$//e
+
+autocmd! BufEnter * call ChangeWindowTitle()
 " }}}
 
 " Custom Functions {{{
@@ -145,6 +174,10 @@ function! LandSlide(nargs, ...)
     echom "Generating slideshow " . expand("%")
     execute 'silent !/usr/bin/env landslide ' . l:cmdargs . " -d " . shellescape(l:fname) . " " . expand("%:p")
     execute 'silent !/usr/bin/env open ' . shellescape(l:fname)
+endfunction
+
+function! ChangeWindowTitle()
+  let &titlestring = hostname() . ":" . expand("%:p")
 endfunction
 " }}}
 
@@ -250,10 +283,15 @@ let g:session_autosave_periodic = 5 "minutes
 " gitgutter config
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
+
+let g:VimuxUseNearestPane = 1
+
+let g:turbux_command_test_unit = 'clear; zeus test'
+
+let &titleold=getcwd()
 " }}}
 
 " Abbreviations {{{
 iabbr {{now}} <C-r>=system("date")<CR>
 " }}}
 
-filetype plugin indent on

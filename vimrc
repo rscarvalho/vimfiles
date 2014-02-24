@@ -1,6 +1,7 @@
 " Last editing: Wed Jan 29 10:53:03 BRST 2014
 "
 
+set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/vundle/
@@ -16,7 +17,7 @@ Bundle "tomtom/tlib_vim"
 Bundle "MarcWeber/vim-addon-mw-utils"
 
 " Documentation
-Bundle "rizzatti/dash.vim"
+" Bundle "rizzatti/dash.vim"
 
 " Editor power-ups
 Bundle "xolox/vim-misc"
@@ -49,6 +50,7 @@ Bundle "plasticboy/vim-markdown"
 " Bundle \"ap/vim-css-color\"
 Bundle "vim-scripts/Vim-R-plugin"
 Bundle "vim-scripts/po.vim--Jelenak"
+Bundle "Rip-Rip/clang_complete"
 
 " Color schemes
 Bundle "croaker/mustang-vim"
@@ -125,6 +127,10 @@ set scrolloff=9999 " set cursor in middle of the screen when searching
 set clipboard=unnamed
 " }}}
 
+set bg=dark
+syntax on
+colorscheme solarized
+
 filetype plugin indent on
 
 " Filetype-specific settings {{{
@@ -194,26 +200,103 @@ command! -nargs=1 -complete=file MoveTo call MoveTo(<f-args>)
 command! LandSlide call LandSlide(0)
 " }}}
 
+" Plugin Configuration {{{
+let mapleader=","
+let maplocalleader = "\\"
+
+let g:ctrlp_follow_symlinks=1
+
+let g:netrw_liststyle=3
+
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
+if has("gui")
+    let g:airline_theme="luna"
+else
+    let g:ariline_theme="bubblegum"
+endif
+
+let coffee_compiler = '/usr/local/share/npm/bin/coffee'
+let g:vim_markdown_folding_disabled=1
+
+" TagBar {{{
+let g:tagbar_type_css = {
+            \        'ctagstype' : 'Css',
+            \        'kinds'     : [
+            \        'c:classes',
+            \        's:selectors',
+            \        'i:identities'
+            \       ]
+            \ }
+let g:tagbar_type_sass = g:tagbar_type_css
+let g:tagbar_type_scss = g:tagbar_type_css
+" }}}
+
+" Syntastic options
+let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " trimming empty <"]
+
+" vim-session variables {{{
+let g:session_autosave = 'yes'
+let g:session_autoload = 1
+let g:session_autosave_periodic = 5 "minutes
+" }}}
+
+" gitgutter config
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
+let g:VimuxUseNearestPane = 1
+
+let g:turbux_command_test_unit = 'clear; zeus test'
+
+let &titleold=getcwd()
+let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
+" }}}
+
 " Keyboard mappings: {{{
 " NORMAL {{{
-nnoremap <leader>x :chdir ~/code/
+
+nnoremap <Leader>l :set number!<CR>
+nnoremap <Leader>p :set paste!<CR>
+nnoremap <Leader>q :set nohlsearch<CR>
+
+nnoremap <Leader>x :chdir ~/code/
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
+" Navigate to the last edited buffer
+nmap <C-e> :b#<CR>
+
+nmap j gj
+nmap k gk
+
+" Make command-line acts like a shell in emacs-mode
+cnoremap <C-a>  <Home>
+cnoremap <C-b>  <Left>
+cnoremap <C-f>  <Right>
+cnoremap <C-d>  <Delete>
+cnoremap <M-b>  <S-Left>
+cnoremap <M-f>  <S-Right>
+cnoremap <M-d>  <S-right><Delete>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+cnoremap <Esc>d <S-right><Delete>
+cnoremap <C-g>  <C-c>
+
 " Splits
 " window
-nmap <leader>swl :topleft vnew<CR>
-nmap <leader>swh :botright vnew<CR>
-nmap <leader>swk :topleft new<CR>
-nmap <leader>swj :botright new<CR>
+nmap <Leader>swl :topleft vnew<CR>
+nmap <Leader>swh :botright vnew<CR>
+nmap <Leader>swk :topleft new<CR>
+nmap <Leader>swj :botright new<CR>
 
 " buffer
-nmap <leader>sl :leftabove vnew<CR>
-nmap <leader>sh :rightbelow vnew<CR>
-nmap <leader>sk :leftabove new<CR>
-nmap <leader>sj :rightbelow new<CR>
+nmap <Leader>sl :leftabove vnew<CR>
+nmap <Leader>sh :rightbelow vnew<CR>
+nmap <Leader>sk :leftabove new<CR>
+nmap <Leader>sj :rightbelow new<CR>
 
-nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap ; :CtrlPBuffer<CR>
 
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>
@@ -241,54 +324,6 @@ inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Es
 inoremap jj <ESC>
 
 " }}}
-" }}}
-
-colorscheme solarized
-
-" Plugin Configuration {{{
-let mapleader=","
-let g:ctrlp_follow_symlinks=1
-let g:netrw_liststyle=3
-let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-
-if has("gui")
-    let g:airline_theme="luna"
-else
-    let g:ariline_theme="bubblegum"
-endif
-
-let coffee_compiler = '/usr/local/share/npm/bin/coffee'
-let g:vim_markdown_folding_disabled=1
-
-
-let g:tagbar_type_css = {
-            \        'ctagstype' : 'Css',
-            \        'kinds'     : [
-            \        'c:classes',
-            \        's:selectors',
-            \        'i:identities'
-            \       ]
-            \ }
-let g:tagbar_type_sass = g:tagbar_type_css
-let g:tagbar_type_scss = g:tagbar_type_css
-
-" Syntastic options
-let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " trimming empty <"]
-
-" vim-session variables
-let g:session_autosave = 'yes'
-let g:session_autoload = 1
-let g:session_autosave_periodic = 5 "minutes
-
-" gitgutter config
-let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
-
-let g:VimuxUseNearestPane = 1
-
-let g:turbux_command_test_unit = 'clear; zeus test'
-
-let &titleold=getcwd()
 " }}}
 
 " Abbreviations {{{

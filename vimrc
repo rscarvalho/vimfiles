@@ -62,6 +62,7 @@ Bundle "tpope/vim-rails"
 
 " Miscelaneous
 Bundle "ivalkeen/vim-simpledb"
+Bundle "tacahiroy/ctrlp-funky"
 " }}}
 
 " General Options {{{
@@ -205,6 +206,8 @@ let mapleader=","
 let maplocalleader = "\\"
 
 let g:ctrlp_follow_symlinks=1
+let g:ctrlp_extensions = ['funky']
+let g:ctrlp_funky_syntax_highlight = 1
 
 let g:netrw_liststyle=3
 
@@ -297,6 +300,8 @@ nmap <Leader>sk :leftabove new<CR>
 nmap <Leader>sj :rightbelow new<CR>
 
 nnoremap ; :CtrlPBuffer<CR>
+nnoremap <Leader>fu :CtrlPFunky<CR>
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 
 
 nnoremap <C-w>gd <C-w>h<C-w>c:diffoff<CR>:echom "Diff closed"<CR>

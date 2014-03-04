@@ -1,6 +1,5 @@
 " Last editing: Wed Jan 29 10:53:03 BRST 2014
 "
-
 set nocompatible
 filetype off
 
@@ -126,6 +125,7 @@ set cursorline
 set scrolloff=9999 " set cursor in middle of the screen when searching
 
 set clipboard=unnamed
+set cpoptions+=$ " puts a $ marker for the end of words/lines in cw/c$ comments
 " }}}
 
 set bg=dark
@@ -145,6 +145,8 @@ autocmd! BufNewFile,BufRead *.jbuilder set filetype=ruby
 autocmd! BufWritePre * :%s/\s\+$//e
 
 autocmd! BufEnter * call ChangeWindowTitle()
+
+autocmd! User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
 " }}}
 
 " Custom Functions {{{
@@ -153,6 +155,13 @@ function! MoveTo(newname)
     exec "saveas " . a:newname
     call delete(a:oldname)
     exec "bdelete " . a:oldname
+endfunction
+
+function! DeleteFile()
+  let a:name = expand("%:p")
+  call delete(a:name)
+  exec "bprevious"
+  exec "bdelete " . a:name
 endfunction
 
 function! OpenSourceTree()
@@ -199,25 +208,44 @@ command! StripBlankLines exec ':%s/\(\s*\n\s*\)\{2,}/\r\r'|:noh
 
 command! -nargs=1 -complete=file MoveTo call MoveTo(<f-args>)
 command! LandSlide call LandSlide(0)
+
+command! DeleteFile call DeleteFile()
 " }}}
 
 " Plugin Configuration {{{
 let mapleader=","
 let maplocalleader = "\\"
 
+" CtrlP {{{
 let g:ctrlp_follow_symlinks=1
-let g:ctrlp_extensions = ['funky']
-let g:ctrlp_funky_syntax_highlight = 1
-
-let g:netrw_liststyle=3
-
-let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.branch = "\ue0a0"
+let g:airline_left_sep = "\ue0b0"
+let g:airline_right_sep = "\ue0b2"
 
 if has("gui")
     let g:airline_theme="luna"
 else
-    let g:ariline_theme="bubblegum"
+    " let g:ariline_theme="bubblegum"
+    let g:ariline_theme="solarized"
 endif
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 1
+
+let g:ctrlp_extensions = ['tag', 'buffertag', 'funky', 'quickfix', 'rtscript']
+let g:ctrlp_funky_syntax_highlight = 1
+
+if has("mac")
+  let g:ctrlp_buftag_ctags_bin = "/usr/local/bin/ctags"
+endif
+" }}}
+
+let g:netrw_liststyle=3
+
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
 let coffee_compiler = '/usr/local/share/npm/bin/coffee'
 let g:vim_markdown_folding_disabled=1
@@ -251,6 +279,7 @@ let g:gitgutter_eager = 0
 let g:VimuxUseNearestPane = 1
 
 let g:turbux_command_test_unit = 'clear; zeus test'
+let g:turbux_command_rspec = 'clear; zeus test'
 
 let &titleold=getcwd()
 let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
@@ -258,7 +287,6 @@ let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchain
 
 " Keyboard mappings: {{{
 " NORMAL {{{
-
 nnoremap <Leader>l :set number!<CR>
 nnoremap <Leader>p :set paste!<CR>
 nnoremap <Leader>q :set nohlsearch<CR>
@@ -267,24 +295,15 @@ nnoremap <Leader>x :chdir ~/code/
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
 
+nnoremap tt :silent! TagbarToggle<CR>
+nnoremap <C-s> :w<CR>
+
 " Navigate to the last edited buffer
 nmap <C-e> :b#<CR>
 
 nmap j gj
 nmap k gk
 
-" Make command-line acts like a shell in emacs-mode
-cnoremap <C-a>  <Home>
-cnoremap <C-b>  <Left>
-cnoremap <C-f>  <Right>
-cnoremap <C-d>  <Delete>
-cnoremap <M-b>  <S-Left>
-cnoremap <M-f>  <S-Right>
-cnoremap <M-d>  <S-right><Delete>
-cnoremap <Esc>b <S-Left>
-cnoremap <Esc>f <S-Right>
-cnoremap <Esc>d <S-right><Delete>
-cnoremap <C-g>  <C-c>
 
 " Splits
 " window
@@ -311,6 +330,7 @@ nnoremap <F8> :TagbarToggle<CR>
 
 nnoremap <Space> za
 " }}}
+
 " INSERT {{{
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -328,10 +348,26 @@ inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Es
 
 inoremap jj <ESC>
 
+inoremap <C-s> <ESC>:w<CR>i
+" }}}
+
+" COMMAND {{{
+" Make command-line acts like a shell in emacs-mode
+cnoremap <C-a>  <Home>
+cnoremap <C-b>  <Left>
+cnoremap <C-f>  <Right>
+cnoremap <C-d>  <Delete>
+cnoremap <M-b>  <S-Left>
+cnoremap <M-f>  <S-Right>
+cnoremap <M-d>  <S-right><Delete>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+cnoremap <Esc>d <S-right><Delete>
+cnoremap <C-g>  <C-c>
+command! Q q
 " }}}
 " }}}
 
 " Abbreviations {{{
 iabbr {{now}} <C-r>=system("date")<CR>
 " }}}
-

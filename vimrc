@@ -1,5 +1,5 @@
 " Last editing: Wed Jan 29 10:53:03 BRST 2014
-"
+
 set nocompatible
 filetype off
 
@@ -54,6 +54,7 @@ Bundle "Rip-Rip/clang_complete"
 " Color schemes
 Bundle "croaker/mustang-vim"
 Bundle "altercation/vim-colors-solarized"
+Bundle "chriskempson/base16-vim"
 
 " Ruby on Rails support
 Bundle "tpope/vim-rails"
@@ -122,7 +123,7 @@ set nrformats=
 set spelllang=en_us
 set grepprg=ack
 set cursorline
-set scrolloff=9999 " set cursor in middle of the screen when searching
+" set scrolloff=9999 " set cursor in middle of the screen when searching
 
 set clipboard=unnamed
 set cpoptions+=$ " puts a $ marker for the end of words/lines in cw/c$ comments
@@ -130,7 +131,8 @@ set cpoptions+=$ " puts a $ marker for the end of words/lines in cw/c$ comments
 
 set bg=dark
 syntax on
-colorscheme solarized
+" colorscheme solarized
+colorscheme base16-eighties
 
 filetype plugin indent on
 
@@ -146,7 +148,9 @@ autocmd! BufWritePre * :%s/\s\+$//e
 
 autocmd! BufEnter * call ChangeWindowTitle()
 
-autocmd! User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
+" autocmd! User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
+autocmd! User Rails nmap <Leader>sc :sp db/schema.rb<CR>
+autocmd! User Rails nmap <Leader>eg :sp Gemfile<CR>
 " }}}
 
 " Custom Functions {{{
@@ -229,8 +233,7 @@ let g:airline_right_sep = "\ue0b2"
 if has("gui")
     let g:airline_theme="luna"
 else
-    " let g:ariline_theme="bubblegum"
-    let g:ariline_theme="solarized"
+    let g:airline_theme="bubblegum"
 endif
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1

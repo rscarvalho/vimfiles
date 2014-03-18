@@ -50,6 +50,10 @@ Bundle "plasticboy/vim-markdown"
 Bundle "vim-scripts/Vim-R-plugin"
 Bundle "vim-scripts/po.vim--Jelenak"
 Bundle "Rip-Rip/clang_complete"
+Bundle "vim-scripts/ingo-library"
+Bundle "vim-scripts/CountJump"
+Bundle "vim-scripts/ConflictDetection"
+Bundle "vim-scripts/ConflictMotions"
 
 " Color schemes
 Bundle "croaker/mustang-vim"
@@ -222,13 +226,13 @@ let maplocalleader = "\\"
 
 " CtrlP {{{
 let g:ctrlp_follow_symlinks=1
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.branch = "\ue0a0"
-let g:airline_left_sep = "\ue0b0"
-let g:airline_right_sep = "\ue0b2"
+" let g:airline_powerline_fonts = 1
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
+" let g:airline_symbols.branch = "\ue0a0"
+" let g:airline_left_sep = "\ue0b0"
+" let g:airline_right_sep = "\ue0b2"
 
 if has("gui")
     let g:airline_theme="luna"
@@ -286,6 +290,20 @@ let g:turbux_command_rspec = 'clear; zeus test'
 
 let &titleold=getcwd()
 let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
+
+" rails.vim {{{
+let g:rails_projections = {
+      \     "app/jobs/*_job.rb": {
+      \         "command": "job",
+      \         "template": "class %SJob\nend",
+      \         "test": [
+      \             "test/jobs/%s_job_test.rb",
+      \             "spec/jobs/%s_job_spec.rb"
+      \         ],
+      \         "keywords": "background task"
+      \     }
+      \ }
+" }}}
 " }}}
 
 " Keyboard mappings: {{{
@@ -300,6 +318,9 @@ nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 nnoremap tt :silent! TagbarToggle<CR>
 nnoremap <C-s> :w<CR>
+
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tp :tabprevious<CR>
 
 " Navigate to the last edited buffer
 nmap <C-e> :b#<CR>
@@ -368,6 +389,7 @@ cnoremap <Esc>f <S-Right>
 cnoremap <Esc>d <S-right><Delete>
 cnoremap <C-g>  <C-c>
 command! Q q
+command! Bw exec 'b #'|'bd #'
 " }}}
 " }}}
 

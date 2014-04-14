@@ -35,6 +35,9 @@ Bundle "mileszs/ack.vim"
 Bundle "majutsushi/tagbar"
 Bundle "benmills/vimux"
 Bundle "jgdavey/vim-turbux"
+Bundle "tomtom/tcomment_vim"
+Bundle "duff/vim-scratch"
+" Bundle "Valloric/YouCompleteMe"
 
 " Language support
 " Bundle "dart-lang/dart-vim-plugin"
@@ -68,6 +71,8 @@ Bundle "tpope/vim-rails"
 Bundle "ivalkeen/vim-simpledb"
 Bundle "tacahiroy/ctrlp-funky"
 " }}}
+
+filetype plugin indent on
 
 " General Options {{{
 set hlsearch
@@ -138,8 +143,6 @@ syntax on
 " colorscheme solarized
 colorscheme base16-eighties
 
-filetype plugin indent on
-
 " Filetype-specific settings {{{
 autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2
 autocmd! FileType eruby setlocal shiftwidth=2 tabstop=2
@@ -150,11 +153,13 @@ autocmd! FileType vim setlocal shiftwidth=2 tabstop=2
 autocmd! BufNewFile,BufRead *.jbuilder set filetype=ruby
 autocmd! BufWritePre * :%s/\s\+$//e
 
-autocmd! BufEnter * call ChangeWindowTitle()
+" special settings for omnicomplete with ruby
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+" autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " autocmd! User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
 autocmd! User Rails nmap <Leader>sc :sp db/schema.rb<CR>
-autocmd! User Rails nmap <Leader>eg :sp Gemfile<CR>
 " }}}
 
 " Custom Functions {{{
@@ -200,8 +205,18 @@ function! LandSlide(nargs, ...)
     execute 'silent !/usr/bin/env open ' . shellescape(l:fname)
 endfunction
 
-function! ChangeWindowTitle()
-  let &titlestring = hostname() . ":" . expand("%:p")
+function! ToggleMaxWins()
+  if exists('g:windowMax')
+    au! maxCurrWin
+    wincmd =
+    unlet g:windowMax
+  else
+    augroup maxCurrWin
+      au! WinEnter * wincmd _ | wincmd |
+    augroup END
+    do maxCurrWin WinEnter
+    let g:windowMax = 1
+  endif
 endfunction
 " }}}
 
@@ -283,13 +298,13 @@ let g:session_autosave_periodic = 5 "minutes
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
-let g:VimuxUseNearestPane = 1
-
-let g:turbux_command_test_unit = 'clear; zeus test'
-let g:turbux_command_rspec = 'clear; zeus test'
+" let g:turbux_command_test_unit = 'clear; zeus test'
+" let g:turbux_command_rspec = 'clear; zeus test'
 
 let &titleold=getcwd()
 let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
+
+let g:VimuxUseNearestPane = 0
 
 " rails.vim {{{
 let g:rails_projections = {
@@ -304,6 +319,10 @@ let g:rails_projections = {
       \     }
       \ }
 " }}}
+
+" SnipMate
+imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
+smap <C-J> <Plug>snipMateNextOrTrigger
 " }}}
 
 " Keyboard mappings: {{{
@@ -315,12 +334,15 @@ nnoremap <Leader>q :set nohlsearch<CR>
 nnoremap <Leader>x :chdir ~/code/
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <Leader>sv :source $MYVIMRC<CR>
+nnoremap <Leader>bd :bd<CR>
 
 nnoremap tt :silent! TagbarToggle<CR>
 nnoremap <C-s> :w<CR>
 
 nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprevious<CR>
+
+nnoremap <Leader>max :call ToggleMaxWins()<CR>
 
 " Navigate to the last edited buffer
 nmap <C-e> :b#<CR>
@@ -353,23 +375,31 @@ nnoremap <S-Tab> :bprevious<CR>
 nnoremap <F8> :TagbarToggle<CR>
 
 nnoremap <Space> za
+
+nnoremap rp :VimuxPromptCommand<CR>
+nnoremap rl :VimuxRunLastCommand<CR>
+nnoremap ri :VimuxInspectRunner<CR>
+nnoremap rx :VimuxCloseRunner<CR>
+nnoremap rz :VimuxZoomRunner<CR>
 " }}}
 
 " INSERT {{{
 
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+"   \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+" inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+"   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+"
+" " open omni completion menu closing previous if open and opening new menu without changing the text
+" inoremap <expr> <C-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
+"             \ '<C-x><C-o><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
+" " open user completion menu closing previous if open and opening new menu without changing the text
+" inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
+"             \ '<C-x><C-u><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
+"
 
-" open omni completion menu closing previous if open and opening new menu without changing the text
-inoremap <expr> <C-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
-            \ '<C-x><C-o><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
-" open user completion menu closing previous if open and opening new menu without changing the text
-inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
-            \ '<C-x><C-u><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
-
+inoremap <C-Space> <C-x><C-o>
 inoremap jj <ESC>
 
 inoremap <C-s> <ESC>:w<CR>i

@@ -1,78 +1,7 @@
 " Last editing: Wed Jan 29 10:53:03 BRST 2014
 
 set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/vundle/
-
-call vundle#rc()
-
-" Vundle setup {{{
-Bundle "gmarik/vundle"
-
-" Libraries
-Bundle "rizzatti/funcoo.vim"
-Bundle "tomtom/tlib_vim"
-Bundle "MarcWeber/vim-addon-mw-utils"
-
-" Documentation
-" Bundle "rizzatti/dash.vim"
-
-" Editor power-ups
-Bundle "xolox/vim-misc"
-Bundle "xolox/vim-session"
-Bundle "kien/ctrlp.vim"
-Bundle "tpope/vim-surround"
-Bundle "tpope/vim-sensible"
-Bundle "tpope/vim-fugitive"
-Bundle "bling/vim-airline"
-Bundle "garbas/vim-snipmate"
-Bundle "honza/vim-snippets"
-" Bundle \"mattn/gist-vim\"
-Bundle "terryma/vim-multiple-cursors"
-Bundle "scrooloose/syntastic"
-Bundle "mileszs/ack.vim"
-Bundle "majutsushi/tagbar"
-Bundle "benmills/vimux"
-Bundle "jgdavey/vim-turbux"
-Bundle "tomtom/tcomment_vim"
-Bundle "duff/vim-scratch"
-" Bundle "Valloric/YouCompleteMe"
-
-" Language support
-" Bundle "dart-lang/dart-vim-plugin"
-Bundle "pangloss/vim-javascript"
-Bundle "vim-ruby/vim-ruby"
-Bundle "nono/vim-handlebars"
-Bundle "evanmiller/nginx-vim-syntax"
-Bundle "kchmck/vim-coffee-script"
-Bundle "tpope/vim-cucumber"
-Bundle "plasticboy/vim-markdown"
-" Messing up with colors on other windows
-" Bundle \"ap/vim-css-color\"
-Bundle "vim-scripts/Vim-R-plugin"
-Bundle "vim-scripts/po.vim--Jelenak"
-Bundle "Rip-Rip/clang_complete"
-Bundle "vim-scripts/ingo-library"
-Bundle "vim-scripts/CountJump"
-Bundle "vim-scripts/ConflictDetection"
-Bundle "vim-scripts/ConflictMotions"
-
-" Color schemes
-Bundle "croaker/mustang-vim"
-Bundle "altercation/vim-colors-solarized"
-Bundle "chriskempson/base16-vim"
-
-" Ruby on Rails support
-Bundle "tpope/vim-rails"
-" Bundle \"tpope/vim-bundler\"
-
-" Miscelaneous
-Bundle "ivalkeen/vim-simpledb"
-Bundle "tacahiroy/ctrlp-funky"
-" }}}
-
-filetype plugin indent on
+source $HOME/.vim/bundles.vim
 
 " General Options {{{
 set hlsearch
@@ -130,7 +59,7 @@ set t_Co=256
 set nrformats=
 
 set spelllang=en_us
-set grepprg=ack
+set grepprg="ack -s -H --nocolor --nogroup --column --ignore-dir=vendor/ruby"
 set cursorline
 " set scrolloff=9999 " set cursor in middle of the screen when searching
 
@@ -139,9 +68,8 @@ set cpoptions+=$ " puts a $ marker for the end of words/lines in cw/c$ comments
 " }}}
 
 set bg=dark
-syntax on
-" colorscheme solarized
-colorscheme base16-eighties
+let g:hybrid_use_iTerm_colors = 1
+colorscheme hybrid
 
 " Filetype-specific settings {{{
 autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2
@@ -154,12 +82,24 @@ autocmd! BufNewFile,BufRead *.jbuilder set filetype=ruby
 autocmd! BufWritePre * :%s/\s\+$//e
 
 " special settings for omnicomplete with ruby
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+augroup filetype_ruby
+  autocmd!
+  autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+  autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+  autocmd FileType ruby set foldexpr=RubyMethodFold(v:lnum)
+  autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+  autocmd User Rails let g:rubycomplete_rails = 1
+augroup END
 " autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
-" autocmd! User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
-autocmd! User Rails nmap <Leader>sc :sp db/schema.rb<CR>
+
+augroup rails_group
+  autocmd!
+  autocmd User Rails let b:surround_{char2nr('-')} = "<% \r %>" " displays <% %> correctly
+  autocmd User Rails nmap <Leader>sc :sp db/schema.rb<CR>
+  autocmd User Rails nmap <Leader>ge :sp Gemfile<CR>
+  autocmd User Rails nmap <Leader>ro :sp config/routes.rb<CR>
+augroup END
 " }}}
 
 " Custom Functions {{{
@@ -218,6 +158,12 @@ function! ToggleMaxWins()
     let g:windowMax = 1
   endif
 endfunction
+
+function! RubyMethodFold(line)
+  let line_is_method_or_end = synIDattr(synID(a:line,1,0), 'name') == 'rubyMethodBlock'
+  let line_is_def = getline(a:line) =~ '\s*def '
+  return line_is_method_or_end || line_is_def
+endfunction
 " }}}
 
 " General-purpose commands {{{
@@ -249,11 +195,7 @@ let g:ctrlp_follow_symlinks=1
 " let g:airline_left_sep = "\ue0b0"
 " let g:airline_right_sep = "\ue0b2"
 
-if has("gui")
-    let g:airline_theme="luna"
-else
-    let g:airline_theme="bubblegum"
-endif
+let g:airline_theme="hybrid"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 
@@ -286,7 +228,15 @@ let g:tagbar_type_scss = g:tagbar_type_css
 " }}}
 
 " Syntastic options
-let g:syntastic_html_tidy_ignore_errors = [" proprietary attribute \"role\"", " trimming empty <"]
+let g:syntastic_html_tidy_ignore_errors = [
+      \ " proprietary attribute \"role\"",
+      \ "trimming empty <",
+      \" proprietary attribute \"ng-",
+      \"<a> escaping malformed URI reference"
+      \]
+
+" HTML indent rules
+let g:html_indent_inctags = "html,body,head,tbody,script,style"
 
 " vim-session variables {{{
 let g:session_autosave = 'yes'
@@ -300,11 +250,15 @@ let g:gitgutter_eager = 0
 
 " let g:turbux_command_test_unit = 'clear; zeus test'
 " let g:turbux_command_rspec = 'clear; zeus test'
+" let g:turbux_command_test_unit = 'bundle exec m'
 
 let &titleold=getcwd()
 let g:clang_library_path = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
 
 let g:VimuxUseNearestPane = 0
+let g:EclimCompletionMethod = 'omnifunc'
+
+let g:ackprg="ack -s -H --nocolor --nogroup --column --ignore-dir=vendor/ruby"
 
 " rails.vim {{{
 let g:rails_projections = {
@@ -316,20 +270,29 @@ let g:rails_projections = {
       \             "spec/jobs/%s_job_spec.rb"
       \         ],
       \         "keywords": "background task"
+      \     },
+      \     "app/services/*_service.rb": {
+      \         "command": "service",
+      \         "template": "class %SService\nend",
+      \         "test": [
+      \             "test/services/%s_service_test.rb",
+      \             "spec/services/%s_service_spec.rb"
+      \         ],
+      \         "keywords": "service"
       \     }
       \ }
 " }}}
 
 " SnipMate
-imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
+" imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
+" smap <C-J> <Plug>snipMateNextOrTrigger
 " }}}
 
 " Keyboard mappings: {{{
 " NORMAL {{{
 nnoremap <Leader>l :set number!<CR>
 nnoremap <Leader>p :set paste!<CR>
-nnoremap <Leader>q :set nohlsearch<CR>
+nnoremap <Leader>q :set hlsearch!<CR>
 
 nnoremap <Leader>x :chdir ~/code/
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
@@ -343,6 +306,7 @@ nnoremap <Leader>tn :tabnext<CR>
 nnoremap <Leader>tp :tabprevious<CR>
 
 nnoremap <Leader>max :call ToggleMaxWins()<CR>
+" nnoremap <Leader>P :call VimuxRunCommand("bundle exec m " . expand("%") . ":" . line("."))<CR>
 
 " Navigate to the last edited buffer
 nmap <C-e> :b#<CR>
@@ -407,9 +371,9 @@ inoremap <C-s> <ESC>:w<CR>i
 
 " COMMAND {{{
 " Make command-line acts like a shell in emacs-mode
-cnoremap <C-a>  <Home>
-cnoremap <C-b>  <Left>
-cnoremap <C-f>  <Right>
+" cnoremap <C-a>  <Home>
+" cnoremap <C-b>  <Left>
+" cnoremap <C-f>  <Right>
 cnoremap <C-d>  <Delete>
 cnoremap <M-b>  <S-Left>
 cnoremap <M-f>  <S-Right>
@@ -419,7 +383,7 @@ cnoremap <Esc>f <S-Right>
 cnoremap <Esc>d <S-right><Delete>
 cnoremap <C-g>  <C-c>
 command! Q q
-command! Bw exec 'b #'|'bd #'
+command! Bw exec b #|bd #
 " }}}
 " }}}
 

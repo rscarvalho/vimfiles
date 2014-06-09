@@ -11,6 +11,8 @@ endif
 
 if has("gui_gtk") || has("gui_gtk2")
   map <C-S-t> <ESC>:tabnew<CR>
+else
+  set guifont=Fira\ Mono:h14
 endif
 
 set columns=160

@@ -67,23 +67,24 @@ set clipboard=unnamed
 set cpoptions+=$ " puts a $ marker for the end of words/lines in cw/c$ comments
 " }}}
 
-set bg=dark
-let g:hybrid_use_iTerm_colors = 1
-colorscheme hybrid
-
 " Filetype-specific settings {{{
-autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2
-autocmd! FileType eruby setlocal shiftwidth=2 tabstop=2
-autocmd! FileType css setlocal shiftwidth=2 tabstop=2
-autocmd! FileType coffee setlocal shiftwidth=2 tabstop=2
-autocmd! FileType yaml setlocal shiftwidth=2 tabstop=2
-autocmd! FileType vim setlocal shiftwidth=2 tabstop=2
-autocmd! BufNewFile,BufRead *.jbuilder set filetype=ruby
+
+augroup TwoSpaces
+  autocmd!
+  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
+  autocmd FileType eruby setlocal shiftwidth=2 tabstop=2
+  autocmd FileType css setlocal shiftwidth=2 tabstop=2
+  autocmd FileType coffee setlocal shiftwidth=2 tabstop=2
+  autocmd FileType yaml setlocal shiftwidth=2 tabstop=2
+  autocmd FileType vim setlocal shiftwidth=2 tabstop=2
+augroup END
+
 autocmd! BufWritePre * :%s/\s\+$//e
 
 " special settings for omnicomplete with ruby
 augroup filetype_ruby
   autocmd!
+  autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
   autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
   autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
   autocmd FileType ruby set foldexpr=RubyMethodFold(v:lnum)
@@ -92,6 +93,10 @@ augroup filetype_ruby
 augroup END
 " autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
+augroup filetype_coffeescript
+  autocmd!
+  autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+augroup END
 
 augroup rails_group
   autocmd!
@@ -120,7 +125,7 @@ endfunction
 function! OpenSourceTree()
     let l:git_root=system("cd " . shellescape(expand("%:p:h")) . " && git rev-parse --show-toplevel")
     let l:git_root=strpart(l:git_root, 0, strlen(l:git_root) - 1)
-    execute "silent !/usr/bin/open -a SourceTree " . shellescape(l:git_root)
+    execute "silent !/usr/bin/open -a Tree " . shellescape(l:git_root)
 endfunction
 
 function! LandSlide(nargs, ...)
@@ -195,7 +200,7 @@ let g:ctrlp_follow_symlinks=1
 " let g:airline_left_sep = "\ue0b0"
 " let g:airline_right_sep = "\ue0b2"
 
-let g:airline_theme="hybrid"
+let g:airline_theme="ubaryd"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 
@@ -205,6 +210,8 @@ let g:ctrlp_funky_syntax_highlight = 1
 if has("mac")
   let g:ctrlp_buftag_ctags_bin = "/usr/local/bin/ctags"
 endif
+
+set tags=./tags,tags,$HOME/.vim/tags
 " }}}
 
 let g:netrw_liststyle=3
@@ -235,8 +242,13 @@ let g:syntastic_html_tidy_ignore_errors = [
       \"<a> escaping malformed URI reference"
       \]
 
+let g:syntastic_ruby_ignore_errors = [
+      \ "Line is too long"
+      \]
+
 " HTML indent rules
 let g:html_indent_inctags = "html,body,head,tbody,script,style"
+let g:html_indent_tags = '\|p\|nav\|li'
 
 " vim-session variables {{{
 let g:session_autosave = 'yes'

@@ -31,7 +31,6 @@ Plugin 'duff/vim-scratch'
 " Plugin 'Valloric/YouCompleteMe'
 
 " Language support
-" Plugin "dart-lang/dart-vim-plugin"
 Plugin 'pangloss/vim-javascript'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'nono/vim-handlebars'
@@ -40,23 +39,26 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'tpope/vim-cucumber'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'vim-scripts/Vim-R-plugin'
-Plugin 'vim-scripts/po.vim--Jelenak'
 Plugin 'Rip-Rip/clang_complete'
 Plugin 'vim-scripts/ingo-library'
 Plugin 'vim-scripts/CountJump'
 Plugin 'vim-scripts/ConflictDetection'
 Plugin 'vim-scripts/ConflictMotions'
+Plugin 'mxw/vim-jsx'
+Plugin 'othree/html5.vim'
+Plugin 'vim-scripts/javacomplete'
+Plugin 'vim-android/vim-find-android-manifest'
 
 " Color schemes
 Plugin 'croaker/mustang-vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'chriskempson/base16-vim'
 Plugin 'w0ng/vim-hybrid'
-Plugin 'Lokaltog/vim-distinguished'
+Plugin 'morhetz/gruvbox'
 
 " Ruby on Rails support
 Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-bundler'
+" Plugin 'tpope/vim-bundler'
 
 " Miscelaneous
 Plugin 'ivalkeen/vim-simpledb'

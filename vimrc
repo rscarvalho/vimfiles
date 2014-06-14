@@ -23,6 +23,7 @@ set softtabstop=4
 set shiftwidth=4
 set expandtab
 set noshowcmd
+set linespace=3
 
 set foldenable
 set foldmethod=marker
@@ -45,6 +46,7 @@ set completeopt=longest,menuone
 
 set wildignore+=*/vendor/ruby/*,*/vendor/jruby/*
 set wildignore+=vendor/ruby/*,vendor/jruby/*
+set wildignore+=node_modules/*
 
 set title
 set history=1000

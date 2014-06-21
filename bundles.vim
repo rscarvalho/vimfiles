@@ -62,7 +62,8 @@ Plugin 'morhetz/gruvbox'
 
 " Ruby on Rails support
 Plugin 'tpope/vim-rails'
-" Plugin 'tpope/vim-bundler'
+Plugin 'tpope/vim-bundler'
+Plugin 'tpope/vim-rake'
 
 " Miscelaneous
 Plugin 'ivalkeen/vim-simpledb'

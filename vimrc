@@ -203,8 +203,11 @@ let g:ctrlp_follow_symlinks=1
 " let g:airline_right_sep = "\ue0b2"
 
 let g:airline_theme="ubaryd"
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 1
+
+if !has("gui")
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline#extensions#tabline#show_buffers = 1
+endif
 
 let g:ctrlp_extensions = ['tag', 'buffertag', 'funky', 'quickfix', 'rtscript']
 let g:ctrlp_funky_syntax_highlight = 1
